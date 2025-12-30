@@ -1,4 +1,5 @@
 import { Button, Input, PasswordInput } from "@/components/ui";
+import { useAuth } from "@/providers/AuthProvider";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "expo-router";
 import React from "react";
@@ -18,6 +19,8 @@ type LoginFormData = z.infer<typeof loginSchema>;
 
 export default function LoginScreen() {
     const router = useRouter();
+    const { signIn } = useAuth();
+
     const {
         control,
         handleSubmit,
@@ -32,18 +35,10 @@ export default function LoginScreen() {
 
     const onSubmit = async (data: LoginFormData) => {
         try {
-            // Local logic simulation
-            await new Promise((resolve) => setTimeout(resolve, 1500));
-            console.log("Login data:", data);
-            alert("Login exitoso");
-
-            // Here you would typically handle the login logic
-            // For now, we'll just show an alert (conceptually) or navigate
-
-            // Example navigation (if dashboard existed)
-            // router.replace("/(tabs)/dashboard");
-        } catch (error) {
+            await signIn(data.email, data.password);
+        } catch (error: any) {
             console.error("Login failed:", error);
+            alert(error.message || "Error al iniciar sesión");
         }
     };
 
@@ -125,7 +120,7 @@ export default function LoginScreen() {
                     <Button
                         variant="ghost"
                         size="sm"
-                        onPress={() => console.log("Sign up pressed")}
+                        onPress={() => router.push("/register")}
                         className="px-0 h-auto py-0 min-h-0"
                     >
                         <Text className="text-primary font-bold">
