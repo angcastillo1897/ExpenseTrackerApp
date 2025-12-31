@@ -1,5 +1,5 @@
 import { Button, Input, PasswordInput } from "@/components/ui";
-import { useAuth } from "@/providers/AuthProvider";
+import { useRegisterMutation } from "@/hooks/useAuthMutations";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "expo-router";
 import React from "react";
@@ -41,12 +41,12 @@ type RegisterFormData = z.infer<typeof registerSchema>;
 
 export default function RegisterScreen() {
     const router = useRouter();
-    const { signUp } = useAuth();
+    const registerMutation = useRegisterMutation();
 
     const {
         control,
         handleSubmit,
-        formState: { errors, isSubmitting },
+        formState: { errors },
     } = useForm<RegisterFormData>({
         resolver: zodResolver(registerSchema),
         defaultValues: {
@@ -59,14 +59,18 @@ export default function RegisterScreen() {
         },
     });
 
-    const onSubmit = async (data: RegisterFormData) => {
-        try {
-            const { confirmPassword, ...submissionData } = data;
-            await signUp(submissionData);
-        } catch (error: any) {
-            console.error("Register failed:", error);
-            alert("Error en el registro");
-        }
+    const onSubmit = (data: RegisterFormData) => {
+        const { confirmPassword, ...submissionData } = data;
+        registerMutation.mutate(submissionData, {
+            onError: (error: any) => {
+                console.error("Register failed:", error);
+                const message =
+                    error?.response?.data?.message ||
+                    error.message ||
+                    "Error en el registro";
+                alert(message);
+            },
+        });
     };
 
     return (
@@ -164,7 +168,7 @@ export default function RegisterScreen() {
 
                     <Button
                         onPress={handleSubmit(onSubmit)}
-                        loading={isSubmitting}
+                        loading={registerMutation.isPending}
                         size="lg"
                         className="mt-2"
                     >

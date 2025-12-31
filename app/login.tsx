@@ -1,5 +1,5 @@
 import { Button, Input, PasswordInput } from "@/components/ui";
-import { useAuth } from "@/providers/AuthProvider";
+import { useLoginMutation } from "@/hooks/useAuthMutations";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "expo-router";
 import React from "react";
@@ -19,12 +19,12 @@ type LoginFormData = z.infer<typeof loginSchema>;
 
 export default function LoginScreen() {
     const router = useRouter();
-    const { signIn } = useAuth();
+    const loginMutation = useLoginMutation();
 
     const {
         control,
         handleSubmit,
-        formState: { errors, isSubmitting },
+        formState: { errors },
     } = useForm<LoginFormData>({
         resolver: zodResolver(loginSchema),
         defaultValues: {
@@ -33,13 +33,21 @@ export default function LoginScreen() {
         },
     });
 
-    const onSubmit = async (data: LoginFormData) => {
-        try {
-            await signIn(data.email, data.password);
-        } catch (error: any) {
-            console.error("Login failed:", error);
-            alert(error.message || "Error al iniciar sesión");
-        }
+    const onSubmit = (data: LoginFormData) => {
+        loginMutation.mutate(
+            { email: data.email, password: data.password },
+            {
+                onError: (error: any) => {
+                    console.error("Login failed:", error);
+                    // Handle specific error messages from API if possible
+                    const message =
+                        error?.response?.data?.message ||
+                        error.message ||
+                        "Error al iniciar sesión";
+                    alert(message);
+                },
+            }
+        );
     };
 
     return (
@@ -105,7 +113,7 @@ export default function LoginScreen() {
 
                     <Button
                         onPress={handleSubmit(onSubmit)}
-                        loading={isSubmitting}
+                        loading={loginMutation.isPending}
                         size="lg"
                         className="mt-2"
                     >

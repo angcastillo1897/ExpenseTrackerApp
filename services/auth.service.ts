@@ -1,70 +1,52 @@
 import { AuthResponse, User } from "@/types/auth";
-
-// Mock database
-const MOCK_USER: User = {
-  id: "1",
-  email: "user@example.com",
-  firstName: "Angelo",
-  lastName: "Castillo",
-  avatar: "https://i.pravatar.cc/150?u=angelo",
-};
+import api from "./api";
 
 export const AuthService = {
-  login: async (email: string, password: string): Promise<AuthResponse> => {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        if (email === "user@example.com" && password === "password123") {
-          resolve({
-            user: MOCK_USER,
-            token: "fake-jwt-token-123456789",
-          });
-        } else if (password === "password" || password === "123456") {
-          reject(new Error("Contraseña insegura. Intenta de nuevo."));
-        } else {
-            // For development/mocking purposes, we'll allow any valid credentials locally if not matching specific test cases above
-            // OR enforce strict checking. Let's act like a real API and reject if not matching.
-            // BUT for the user's ease of testing, maybe we relax this or just logging the rule.
-            
-            // Let's implement a relaxed 'success' for any valid formatted email/pass for the sake of the 'fake api' requested behavior unless stated otherwise. 
-            // However, the prompt says "simulate with fake api", usually implies success logic.
-            // Let's return a success for any inputs for now to make it easy to flow, unless it receives a specific "error" trigger.
-            
-           resolve({
-              user: { ...MOCK_USER, email }, // Return user with input email
-              token: "fake-jwt-token-" + Date.now(),
-           });
-        }
-      }, 1500);
-    });
-  },
-
-  register: async (data: any): Promise<AuthResponse> => {
-     return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({
-          user: {
-            id: String(Date.now()),
-            email: data.email,
-            firstName: data.firstName,
-            lastName: data.lastName,
-          },
-          token: "fake-jwt-token-" + Date.now(),
+    login: async (email: string, password: string): Promise<AuthResponse> => {
+        const response = await api.post<AuthResponse>("/auth/login", {
+            email,
+            password,
+            deviceInfo: "optional_device_id", // You might want to get this from expo-device
         });
-      }, 1500);
-    });
-  },
+        return response.data;
+    },
 
-  logout: async (): Promise<void> => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, 500);
-    });
-  },
-  
-  getUser: async (token: string): Promise<User> => {
-       return new Promise((resolve) => {
-      setTimeout(() => {
-          resolve(MOCK_USER);
-      }, 1000);
-    });
-  }
+    register: async (data: any): Promise<AuthResponse> => {
+        const response = await api.post<AuthResponse>("/auth/register", {
+            ...data,
+            deviceInfo: "optional_device_id",
+        });
+        return response.data;
+    },
+
+    logout: async (refreshToken: string): Promise<void> => {
+        await api.post("/auth/logout", { refreshToken });
+    },
+
+    forgotPassword: async (email: string): Promise<void> => {
+        await api.post("/auth/forgot-password", { email });
+    },
+
+    validateResetToken: async (token: string): Promise<void> => {
+        await api.post(`/auth/validate-reset-password-token?token=${token}`);
+    },
+
+    resetPassword: async (token: string, newPassword: string): Promise<void> => {
+        await api.post("/auth/reset-password", {
+            token,
+            newPassword,
+        });
+    },
+
+    // Helper to get user profile if needed separately, though login/register returns it
+    getUser: async (): Promise<User> => {
+        // Assuming there is a /me or /profile endpoint, but the user didn't specify one.
+        // We'll leave this or remove it if not used. 
+        // For now, let's assume we rely on the user object from login/register.
+        // If we strictly follow the user's list, there IS NO /me endpoint.
+        // But often we need to fetch user data if session persists but memory is lost.
+        // Let's assume we might need it later or remove it.
+        // For now I'll comment it out to avoid errors if the endpoint doesn't exist.
+        throw new Error("Method not implemented.");
+    }
 };

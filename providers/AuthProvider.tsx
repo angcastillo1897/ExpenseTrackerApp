@@ -1,12 +1,15 @@
 import { AuthService } from "@/services/auth.service";
-import { AuthState } from "@/types/auth";
+import { AuthState, User } from "@/types/auth";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter, useSegments } from "expo-router";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 interface AuthContextType extends AuthState {
-    signIn: (email: string, password: string) => Promise<void>;
-    signUp: (data: any) => Promise<void>;
+    setSession: (
+        user: User,
+        accessToken: string,
+        refreshToken: string
+    ) => Promise<void>;
     signOut: () => Promise<void>;
 }
 
@@ -30,7 +33,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
                 if (token && userJson) {
                     const user = JSON.parse(userJson);
-                    // Optional: Validate token with API
                     setState({
                         token,
                         user,
@@ -53,72 +55,62 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         if (state.isLoading) return;
 
         // Route Protection Logic
-        const inAuthGroup = rootSegment === "home";
+        // valid segments: "home" | "login" | "register" | "showcase" | "_sitemap"
+        // checking against string directly to avoid strict type checks if segments list is incomplete in types
+        const segment = rootSegment as string;
+        const inAuthGroup =
+            segment === "(auth)" ||
+            segment === "login" ||
+            segment === "register" ||
+            segment === "index";
 
-        if (!state.isAuthenticated && inAuthGroup) {
-            router.replace("/");
+        // If not authenticated and NOT in auth group, redirect to login
+        // But for now, let's just protect "home" specifically as checking inverse is tricky with string matches
+        const inProtectedGroup = segment === "home";
+
+        if (!state.isAuthenticated && inProtectedGroup) {
+            router.replace("/login");
         } else if (
             state.isAuthenticated &&
-            (!rootSegment ||
-                rootSegment === "login" ||
-                rootSegment === "register")
+            (segment === "login" ||
+                segment === "register" ||
+                segment === "index" ||
+                !segment)
         ) {
             router.replace("/home");
         }
     }, [state.isAuthenticated, state.isLoading, rootSegment]);
 
-    const signIn = async (email: string, password: string) => {
-        try {
-            const response = await AuthService.login(email, password);
+    const setSession = async (
+        user: User,
+        accessToken: string,
+        refreshToken: string
+    ) => {
+        await AsyncStorage.setItem("userToken", accessToken);
+        await AsyncStorage.setItem("refreshToken", refreshToken);
+        await AsyncStorage.setItem("userData", JSON.stringify(user));
 
-            await AsyncStorage.setItem("userToken", response.token);
-            await AsyncStorage.setItem(
-                "userData",
-                JSON.stringify(response.user)
-            );
+        setState({
+            token: accessToken,
+            user,
+            isAuthenticated: true,
+            isLoading: false,
+        });
 
-            setState({
-                token: response.token,
-                user: response.user,
-                isAuthenticated: true,
-                isLoading: false,
-            });
-
-            // Navigate to home after successful login
-            router.replace("/home");
-        } catch (error) {
-            //  console.error(error);
-            throw error;
-        }
-    };
-
-    const signUp = async (data: any) => {
-        try {
-            const response = await AuthService.register(data);
-
-            await AsyncStorage.setItem("userToken", response.token);
-            await AsyncStorage.setItem(
-                "userData",
-                JSON.stringify(response.user)
-            );
-
-            setState({
-                token: response.token,
-                user: response.user,
-                isAuthenticated: true,
-                isLoading: false,
-            });
-
-            router.replace("/home");
-        } catch (error) {
-            throw error;
-        }
+        router.replace("/home");
     };
 
     const signOut = async () => {
-        await AuthService.logout();
-        await AsyncStorage.removeItem("userToken");
-        await AsyncStorage.removeItem("userData");
+        try {
+            const refreshToken = await AsyncStorage.getItem("refreshToken");
+            if (refreshToken) {
+                await AuthService.logout(refreshToken);
+            }
+        } catch (e) {
+            console.error("Logout failed", e);
+        }
+
+        await AsyncStorage.clear();
 
         setState({
             user: null,
@@ -127,15 +119,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             isLoading: false,
         });
 
-        router.replace("/"); // Go back to Login/Index
+        router.replace("/login");
     };
 
     return (
         <AuthContext.Provider
             value={{
                 ...state,
-                signIn,
-                signUp,
+                setSession,
                 signOut,
             }}
         >
