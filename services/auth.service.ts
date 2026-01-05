@@ -1,4 +1,5 @@
-import { AuthResponse, User } from "@/types/auth";
+import { AuthResponse } from "@/types";
+import { Platform } from 'react-native';
 import api from "./api";
 
 export const AuthService = {
@@ -6,7 +7,7 @@ export const AuthService = {
         const response = await api.post<AuthResponse>("/auth/login", {
             email,
             password,
-            deviceInfo: "optional_device_id", // You might want to get this from expo-device
+            deviceInfo: Platform.OS + " " + Platform.Version,
         });
         return response.data;
     },
@@ -14,7 +15,7 @@ export const AuthService = {
     register: async (data: any): Promise<AuthResponse> => {
         const response = await api.post<AuthResponse>("/auth/register", {
             ...data,
-            deviceInfo: "optional_device_id",
+            deviceInfo: Platform.OS + " " + Platform.Version,
         });
         return response.data;
     },
@@ -39,14 +40,14 @@ export const AuthService = {
     },
 
     // Helper to get user profile if needed separately, though login/register returns it
-    getUser: async (): Promise<User> => {
-        // Assuming there is a /me or /profile endpoint, but the user didn't specify one.
-        // We'll leave this or remove it if not used. 
-        // For now, let's assume we rely on the user object from login/register.
-        // If we strictly follow the user's list, there IS NO /me endpoint.
-        // But often we need to fetch user data if session persists but memory is lost.
-        // Let's assume we might need it later or remove it.
-        // For now I'll comment it out to avoid errors if the endpoint doesn't exist.
-        throw new Error("Method not implemented.");
-    }
+    // getUser: async (): Promise<User> => {
+    //     // Assuming there is a /me or /profile endpoint, but the user didn't specify one.
+    //     // We'll leave this or remove it if not used. 
+    //     // For now, let's assume we rely on the user object from login/register.
+    //     // If we strictly follow the user's list, there IS NO /me endpoint.
+    //     // But often we need to fetch user data if session persists but memory is lost.
+    //     // Let's assume we might need it later or remove it.
+    //     // For now I'll comment it out to avoid errors if the endpoint doesn't exist.
+    //     throw new Error("Method not implemented.");
+    // }
 };

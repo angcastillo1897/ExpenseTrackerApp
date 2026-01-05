@@ -1,5 +1,5 @@
 import { AuthService } from "@/services/auth.service";
-import { AuthState, User } from "@/types/auth";
+import { AuthState, User } from "@/types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter, useSegments } from "expo-router";
 import React, { createContext, useContext, useEffect, useState } from "react";
@@ -55,29 +55,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         if (state.isLoading) return;
 
         // Route Protection Logic
-        // valid segments: "home" | "login" | "register" | "showcase" | "_sitemap"
-        // checking against string directly to avoid strict type checks if segments list is incomplete in types
+        // Index handles its own routing, so we only protect specific routes here
         const segment = rootSegment as string;
-        const inAuthGroup =
-            segment === "(auth)" ||
-            segment === "login" ||
-            segment === "register" ||
-            segment === "index";
 
-        // If not authenticated and NOT in auth group, redirect to login
-        // But for now, let's just protect "home" specifically as checking inverse is tricky with string matches
-        const inProtectedGroup = segment === "home";
-
-        if (!state.isAuthenticated && inProtectedGroup) {
+        // Protect authenticated routes - redirect to login if not authenticated
+        const protectedRoutes = [
+            "index",
+            "transactions",
+            "categories",
+            "profile",
+        ];
+        if (!state.isAuthenticated && protectedRoutes.includes(segment)) {
             router.replace("/login");
-        } else if (
-            state.isAuthenticated &&
-            (segment === "login" ||
-                segment === "register" ||
-                segment === "index" ||
-                !segment)
-        ) {
-            router.replace("/home");
+        }
+
+        // Redirect authenticated users away from auth screens
+        const authRoutes = ["login", "register"];
+        if (state.isAuthenticated && authRoutes.includes(segment)) {
+            router.replace("/(tabs)");
         }
     }, [state.isAuthenticated, state.isLoading, rootSegment]);
 
@@ -97,7 +92,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             isLoading: false,
         });
 
-        router.replace("/home");
+        router.replace("/(tabs)");
     };
 
     const signOut = async () => {

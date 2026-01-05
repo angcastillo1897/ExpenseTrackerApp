@@ -1,10 +1,11 @@
-import { Button } from "@/components/ui";
+import { Button, ThemeToggle } from "@/components/ui";
 import { useAuth } from "@/providers/AuthProvider";
+import { router } from "expo-router";
 import React from "react";
 import { Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-export default function HomeScreen() {
+export default function ProfileScreen() {
     const { user, signOut } = useAuth();
 
     return (
@@ -32,6 +33,16 @@ export default function HomeScreen() {
                     </Text>
                     <Text className="text-text-secondary">{user?.email}</Text>
                 </View>
+
+                <ThemeToggle />
+
+                <Button
+                    onPress={() => router.push("/showcase")}
+                    variant="outline"
+                    size="lg"
+                >
+                    Ver componentes
+                </Button>
 
                 <Button onPress={signOut} variant="outline" size="lg">
                     Cerrar Sesión

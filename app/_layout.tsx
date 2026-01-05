@@ -1,3 +1,4 @@
+import { CustomHeader } from "@/components/ui/CustomHeader";
 import "@/global.css";
 import { AuthProvider } from "@/providers/AuthProvider";
 import { ThemeProvider } from "@/providers/ThemeProvider";
@@ -6,12 +7,26 @@ import { Stack } from "expo-router";
 
 const queryClient = new QueryClient();
 
+function RootNavigator() {
+    return (
+        <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Screen
+                name="(tabs)"
+                options={{
+                    headerShown: true,
+                    header: () => <CustomHeader />,
+                }}
+            />
+        </Stack>
+    );
+}
+
 export default function RootLayout() {
     return (
         <QueryClientProvider client={queryClient}>
             <ThemeProvider>
                 <AuthProvider>
-                    <Stack screenOptions={{ headerShown: false }} />
+                    <RootNavigator />
                 </AuthProvider>
             </ThemeProvider>
         </QueryClientProvider>

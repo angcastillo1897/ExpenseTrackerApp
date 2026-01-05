@@ -107,7 +107,7 @@ export default function LoginScreen() {
                             }
                             className="px-0"
                         >
-                            Olvidaste tu contraseña?
+                            ¿Olvidaste tu contraseña?
                         </Button>
                     </View>
 
