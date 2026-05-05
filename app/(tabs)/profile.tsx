@@ -1,5 +1,6 @@
-import { Button, ThemeToggle } from "@/components/ui";
+import { Avatar, Button, ThemeToggle } from "@/components/ui";
 import { useAuth } from "@/providers/AuthProvider";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { router } from "expo-router";
 import React from "react";
 import { Text, View } from "react-native";
@@ -9,33 +10,148 @@ export default function ProfileScreen() {
     const { user, signOut } = useAuth();
 
     return (
-        <SafeAreaView className="flex-1 bg-background justify-center items-center p-6">
-            <View className="items-center mb-8">
-                <Text className="text-3xl font-bold text-text mb-2">
-                    Hola, {user?.firstName || "Usuario"}!
-                </Text>
-                <Text className="text-text-secondary text-base text-center">
-                    Bienvenido a tu gestor de gastos. Esta es la página de
-                    inicio protegida.
-                </Text>
+        <SafeAreaView className="flex-1 bg-background justify-start items-center gap-4 p-6">
+            <View className="w-full gap-4">
+                <View className="bg-surface p-6 rounded-2xl shadow-sm border border-border">
+                    <View className="flex-row items-center gap-4">
+                        <Avatar
+                            initials={`${user?.firstName?.charAt(0) || ""}${user?.lastName?.charAt(0) || ""}`}
+                            size="lg"
+                        />
+                        <View>
+                            <Text className="text-lg font-bold text-text mb-1">
+                                {user?.firstName} {user?.lastName}
+                            </Text>
+                            <Text className="text-text-secondary">
+                                {user?.email}
+                            </Text>
+                        </View>
+                        <View className="ml-auto">
+                            <Button variant="ghost" size="sm">
+                                Editar
+                            </Button>
+                        </View>
+                    </View>
+                </View>
+
+                <View className="gap-2">
+                    <Text className="text-lg font-bold text-text">
+                        Preferencias
+                    </Text>
+                    <View className="bg-surface py-6 rounded-2xl shadow-sm border border-border flex-col gap-4">
+                        <View className="flex-row items-center gap-4 px-4">
+                            <View className="w-12 h-12 rounded-full bg-gray-300 flex items-center justify-center">
+                                <Ionicons
+                                    name="notifications-outline"
+                                    size={18}
+                                    color="#000000"
+                                />
+                            </View>
+                            <View>
+                                <Text className="text-text font-bold">
+                                    Notificaciones
+                                </Text>
+                                <Text className="text-text-secondary text-sm">
+                                    Administra tus notificaciones y alertas
+                                </Text>
+                            </View>
+                            <View className="ml-auto">
+                                <Button variant="ghost" size="sm">
+                                    <Ionicons
+                                        name="chevron-forward-outline"
+                                        size={20}
+                                        className="text-text"
+                                    />
+                                </Button>
+                            </View>
+                        </View>
+                        <View className="h-0.5 bg-border" />
+                        <View className="flex-row items-center gap-4 px-4">
+                            <View className="w-12 h-12 rounded-full bg-gray-300 flex items-center justify-center">
+                                <Ionicons
+                                    name="color-palette"
+                                    size={18}
+                                    color="#000000"
+                                />
+                            </View>
+                            <View>
+                                <Text className="text-text font-bold">
+                                    Modo Oscuro
+                                </Text>
+                                <Text className="text-text-secondary text-sm">
+                                    Activa el modo oscuro
+                                </Text>
+                            </View>
+                            <View className="ml-auto">
+                                <ThemeToggle />
+                            </View>
+                        </View>
+                        <View className="h-0.5 bg-border" />
+                        <View className="flex-row items-center gap-4 px-4">
+                            <View className="w-12 h-12 rounded-full bg-gray-300 flex items-center justify-center">
+                                <Ionicons
+                                    name="lock-closed-outline"
+                                    size={18}
+                                    color="#000000"
+                                />
+                            </View>
+                            <View>
+                                <Text className="text-text font-bold">
+                                    Seguridad
+                                </Text>
+                                <Text className="text-text-secondary text-sm">
+                                    Contraseña y seguridad
+                                </Text>
+                            </View>
+                            <View className="ml-auto">
+                                <Button variant="ghost" size="sm">
+                                    <Ionicons
+                                        name="chevron-forward-outline"
+                                        size={20}
+                                        className="text-text"
+                                    />
+                                </Button>
+                            </View>
+                        </View>
+                    </View>
+                </View>
+
+                <View className="gap-2">
+                    <Text className="text-lg font-bold text-text">
+                        Preferencias
+                    </Text>
+                    <View className="bg-surface py-6 rounded-2xl shadow-sm border border-border flex-col gap-4">
+                        <View className="flex-row items-center gap-4 px-4">
+                            <View className="w-12 h-12 rounded-full bg-gray-300 flex items-center justify-center">
+                                <Ionicons
+                                    name="alert-circle-outline"
+                                    size={18}
+                                    color="#000000"
+                                />
+                            </View>
+                            <View>
+                                <Text className="text-text font-bold">
+                                    Centro de ayuda
+                                </Text>
+                                <Text className="text-text-secondary text-sm">
+                                    FAQs y soporte
+                                </Text>
+                            </View>
+                            <View className="ml-auto">
+                                <Button variant="ghost" size="sm">
+                                    <Ionicons
+                                        name="chevron-forward-outline"
+                                        size={20}
+                                        className="text-text"
+                                    />
+                                </Button>
+                            </View>
+                        </View>
+                    </View>
+                </View>
             </View>
 
             <View className="w-full gap-4">
-                <View className="bg-surface p-6 rounded-2xl shadow-sm border border-border">
-                    <Text className="text-lg font-bold text-text mb-1">
-                        Tu ID de Sesión (Mock)
-                    </Text>
-                    <Text className="text-text-secondary mb-4 numberOfLines={1}">
-                        {user?.id}
-                    </Text>
-                    <Text className="text-lg font-bold text-text mb-1">
-                        Email
-                    </Text>
-                    <Text className="text-text-secondary">{user?.email}</Text>
-                </View>
-
-                <ThemeToggle />
-
                 <Button
                     onPress={() => router.push("/showcase")}
                     variant="outline"

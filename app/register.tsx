@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "expo-router";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
-import { Platform, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as z from "zod";
 
@@ -30,7 +30,6 @@ const registerSchema = z
         confirmPassword: z.string().min(8, {
             message: "La confirmación debe tener al menos 8 caracteres",
         }),
-        deviceInfo: z.string().optional(),
     })
     .refine((data) => data.password === data.confirmPassword, {
         message: "Las contraseñas no coinciden",
@@ -55,7 +54,6 @@ export default function RegisterScreen() {
             email: "",
             password: "",
             confirmPassword: "",
-            deviceInfo: Platform.OS + " " + Platform.Version,
         },
     });
 
@@ -94,8 +92,8 @@ export default function RegisterScreen() {
                         name="firstName"
                         render={({ field: { onChange, onBlur, value } }) => (
                             <Input
-                                label="Nombre"
-                                placeholder="Tu nombre"
+                                label="Nombres"
+                                placeholder="Nombres"
                                 onBlur={onBlur}
                                 onChangeText={onChange}
                                 value={value}
@@ -109,8 +107,8 @@ export default function RegisterScreen() {
                         name="lastName"
                         render={({ field: { onChange, onBlur, value } }) => (
                             <Input
-                                label="Apellido"
-                                placeholder="Tu apellido"
+                                label="Apellidos"
+                                placeholder="Apellidos"
                                 onBlur={onBlur}
                                 onChangeText={onChange}
                                 value={value}
@@ -142,7 +140,7 @@ export default function RegisterScreen() {
                         render={({ field: { onChange, onBlur, value } }) => (
                             <PasswordInput
                                 label="Contraseña"
-                                placeholder="Crea tu contraseña"
+                                placeholder="*******"
                                 onBlur={onBlur}
                                 onChangeText={onChange}
                                 value={value}
@@ -157,7 +155,7 @@ export default function RegisterScreen() {
                         render={({ field: { onChange, onBlur, value } }) => (
                             <PasswordInput
                                 label="Confirmar Contraseña"
-                                placeholder="Repite tu contraseña"
+                                placeholder="*******"
                                 onBlur={onBlur}
                                 onChangeText={onChange}
                                 value={value}

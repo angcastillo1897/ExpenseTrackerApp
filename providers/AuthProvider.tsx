@@ -1,15 +1,10 @@
-import { AuthService } from "@/services/auth.service";
 import { AuthState, User } from "@/types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter, useSegments } from "expo-router";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 interface AuthContextType extends AuthState {
-    setSession: (
-        user: User,
-        accessToken: string,
-        refreshToken: string
-    ) => Promise<void>;
+    setSession: (user: User, accessToken: string) => Promise<void>;
     signOut: () => Promise<void>;
 }
 
@@ -76,13 +71,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
     }, [state.isAuthenticated, state.isLoading, rootSegment]);
 
-    const setSession = async (
-        user: User,
-        accessToken: string,
-        refreshToken: string
-    ) => {
+    const setSession = async (user: User, accessToken: string) => {
         await AsyncStorage.setItem("userToken", accessToken);
-        await AsyncStorage.setItem("refreshToken", refreshToken);
         await AsyncStorage.setItem("userData", JSON.stringify(user));
 
         setState({
@@ -97,15 +87,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     const signOut = async () => {
         try {
-            const refreshToken = await AsyncStorage.getItem("refreshToken");
-            if (refreshToken) {
-                await AuthService.logout(refreshToken);
-            }
+            // Clear all stored user data and tokens
+            await AsyncStorage.multiRemove(["userToken", "userData"]);
         } catch (e) {
             console.error("Logout failed", e);
         }
-
-        await AsyncStorage.clear();
 
         setState({
             user: null,
