@@ -1,4 +1,5 @@
-import Feather from "@expo/vector-icons/Feather";
+import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+
 import React from "react";
 import { Image, ImageProps, Text, View } from "react-native";
 
@@ -64,7 +65,7 @@ export function Avatar({
                         {initials.substring(0, 2).toUpperCase()}
                     </Text>
                 ) : (
-                    <Feather
+                    <FontAwesome6
                         name="user"
                         size={
                             size === "sm"

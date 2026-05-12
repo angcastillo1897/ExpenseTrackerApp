@@ -1,6 +1,6 @@
 import { Avatar, Button, ThemeToggle } from "@/components/ui";
 import { useAuth } from "@/providers/AuthProvider";
-import Ionicons from "@expo/vector-icons/Ionicons";
+import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { router } from "expo-router";
 import React from "react";
 import { Text, View } from "react-native";
@@ -41,8 +41,8 @@ export default function ProfileScreen() {
                     <View className="bg-surface py-6 rounded-2xl shadow-sm border border-border flex-col gap-4">
                         <View className="flex-row items-center gap-4 px-4">
                             <View className="w-12 h-12 rounded-full bg-gray-300 flex items-center justify-center">
-                                <Ionicons
-                                    name="notifications-outline"
+                                <FontAwesome6
+                                    name="bell"
                                     size={18}
                                     color="#000000"
                                 />
@@ -57,8 +57,8 @@ export default function ProfileScreen() {
                             </View>
                             <View className="ml-auto">
                                 <Button variant="ghost" size="sm">
-                                    <Ionicons
-                                        name="chevron-forward-outline"
+                                    <FontAwesome6
+                                        name="chevron-right"
                                         size={20}
                                         className="text-text"
                                     />
@@ -68,8 +68,8 @@ export default function ProfileScreen() {
                         <View className="h-0.5 bg-border" />
                         <View className="flex-row items-center gap-4 px-4">
                             <View className="w-12 h-12 rounded-full bg-gray-300 flex items-center justify-center">
-                                <Ionicons
-                                    name="color-palette"
+                                <FontAwesome6
+                                    name="palette"
                                     size={18}
                                     color="#000000"
                                 />
@@ -89,8 +89,8 @@ export default function ProfileScreen() {
                         <View className="h-0.5 bg-border" />
                         <View className="flex-row items-center gap-4 px-4">
                             <View className="w-12 h-12 rounded-full bg-gray-300 flex items-center justify-center">
-                                <Ionicons
-                                    name="lock-closed-outline"
+                                <FontAwesome6
+                                    name="lock"
                                     size={18}
                                     color="#000000"
                                 />
@@ -105,8 +105,8 @@ export default function ProfileScreen() {
                             </View>
                             <View className="ml-auto">
                                 <Button variant="ghost" size="sm">
-                                    <Ionicons
-                                        name="chevron-forward-outline"
+                                    <FontAwesome6
+                                        name="chevron-right"
                                         size={20}
                                         className="text-text"
                                     />
@@ -123,8 +123,8 @@ export default function ProfileScreen() {
                     <View className="bg-surface py-6 rounded-2xl shadow-sm border border-border flex-col gap-4">
                         <View className="flex-row items-center gap-4 px-4">
                             <View className="w-12 h-12 rounded-full bg-gray-300 flex items-center justify-center">
-                                <Ionicons
-                                    name="alert-circle-outline"
+                                <FontAwesome6
+                                    name="question"
                                     size={18}
                                     color="#000000"
                                 />
@@ -139,8 +139,8 @@ export default function ProfileScreen() {
                             </View>
                             <View className="ml-auto">
                                 <Button variant="ghost" size="sm">
-                                    <Ionicons
-                                        name="chevron-forward-outline"
+                                    <FontAwesome6
+                                        name="chevron-right"
                                         size={20}
                                         className="text-text"
                                     />

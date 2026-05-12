@@ -1,6 +1,7 @@
 import { useTheme } from "@/providers/ThemeProvider";
 import { tabSections } from "@/utils/tabSections";
-import Ionicons from "@expo/vector-icons/Ionicons";
+import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+
 import { usePathname } from "expo-router";
 import React from "react";
 import { Text, View } from "react-native";
@@ -13,7 +14,7 @@ export function CustomHeader() {
     const pathname = usePathname();
 
     const section = Object.values(tabSections).find(
-        (section) => section.path === pathname
+        (section) => section.path === pathname,
     );
 
     return (
@@ -39,7 +40,7 @@ export function CustomHeader() {
                 </Text>
                 <View>
                     <Button variant="secondary" size="sm">
-                        <Ionicons name="reorder-four-outline" size={20} />
+                        <FontAwesome6 name="bars" size={20} />
                     </Button>
                 </View>
             </View>

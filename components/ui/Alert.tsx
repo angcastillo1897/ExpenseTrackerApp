@@ -1,4 +1,4 @@
-import Feather from "@expo/vector-icons/Feather";
+import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import React from "react";
 import { Text, View, ViewProps } from "react-native";
 
@@ -31,8 +31,8 @@ export function Alert({
     const iconNames = {
         info: "info" as const,
         success: "check-circle" as const,
-        warning: "alert-triangle" as const,
-        error: "alert-circle" as const,
+        warning: "triangle-exclamation" as const,
+        error: "circle-xmark" as const,
     };
 
     const iconColors = {
@@ -53,7 +53,7 @@ export function Alert({
             {...props}
         >
             {showIcon && (
-                <Feather
+                <FontAwesome6
                     name={iconNames[variant]}
                     size={20}
                     color={iconColors[variant]}

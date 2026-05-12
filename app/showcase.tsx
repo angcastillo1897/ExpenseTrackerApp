@@ -12,7 +12,7 @@ import {
     Switch,
     ThemeToggle,
 } from "@/components/ui";
-import Feather from "@expo/vector-icons/Feather";
+import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import React, { useState } from "react";
 import { ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -83,8 +83,8 @@ export default function ComponentShowcase() {
                             onChangeText={setEmail}
                             required
                             leftIcon={
-                                <Feather
-                                    name="mail"
+                                <FontAwesome6
+                                    name="envelope"
                                     size={20}
                                     color="#9CA3AF"
                                 />

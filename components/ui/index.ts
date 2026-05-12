@@ -32,5 +32,8 @@ export type { PasswordInputProps } from "./PasswordInput";
 export { Switch } from "./Switch";
 export type { SwitchProps } from "./Switch";
 
+export { TabSection } from "./TabSection";
+export type { Tab } from "./TabSection";
+
 export { default as ThemeToggle } from "./ThemeToggle";
 

@@ -1,4 +1,4 @@
-import Feather from "@expo/vector-icons/Feather";
+import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import * as Haptics from "expo-haptics";
 import React from "react";
 import { Pressable, PressableProps, Text, View } from "react-native";
@@ -52,7 +52,9 @@ export function Checkbox({
                     ${disabled ? "opacity-50" : ""}
                 `}
             >
-                {checked && <Feather name="check" size={16} color="#FFFFFF" />}
+                {checked && (
+                    <FontAwesome6 name="check" size={16} color="#FFFFFF" />
+                )}
             </View>
             {label && (
                 <Text

@@ -1,11 +1,21 @@
-import Ionicons from "@expo/vector-icons/Ionicons";
+import { useTheme } from "@/providers/ThemeProvider";
+import { colorValues } from "@/utils/colorTheme";
+import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { Tabs } from "expo-router";
 
 export default function TabLayout() {
+    const { theme } = useTheme();
+    const colors = colorValues[theme];
+
     return (
         <Tabs
             screenOptions={{
-                tabBarActiveTintColor: "green",
+                tabBarActiveTintColor: colors.primary,
+                tabBarInactiveTintColor: colors.textSecondary,
+                tabBarStyle: {
+                    backgroundColor: colors.background,
+                    borderTopColor: colors.border,
+                },
                 animation: "shift",
                 headerShown: false,
             }}
@@ -15,7 +25,7 @@ export default function TabLayout() {
                 options={{
                     tabBarLabel: "Menu",
                     tabBarIcon: ({ color }) => (
-                        <Ionicons size={22} name="wallet" color={color} />
+                        <FontAwesome6 size={18} name="house" color={color} />
                     ),
                 }}
             />
@@ -24,7 +34,11 @@ export default function TabLayout() {
                 options={{
                     tabBarLabel: "Transacciones",
                     tabBarIcon: ({ color }) => (
-                        <Ionicons name="cash" size={22} color={color} />
+                        <FontAwesome6
+                            size={18}
+                            name="money-check-dollar"
+                            color={color}
+                        />
                     ),
                 }}
             />
@@ -33,7 +47,11 @@ export default function TabLayout() {
                 options={{
                     tabBarLabel: "Categorias",
                     tabBarIcon: ({ color }) => (
-                        <Ionicons name="bookmarks" size={22} color={color} />
+                        <FontAwesome6
+                            size={18}
+                            name="list-check"
+                            color={color}
+                        />
                     ),
                 }}
             />
@@ -42,7 +60,7 @@ export default function TabLayout() {
                 options={{
                     tabBarLabel: "Perfil",
                     tabBarIcon: ({ color }) => (
-                        <Ionicons name="person" size={22} color={color} />
+                        <FontAwesome6 size={18} name="user" color={color} />
                     ),
                 }}
             />

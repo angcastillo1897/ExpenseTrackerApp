@@ -1,4 +1,4 @@
-import Feather from "@expo/vector-icons/Feather";
+import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import React, { useState } from "react";
 import { TouchableOpacity } from "react-native";
 import { Input, InputProps } from "./Input";
@@ -27,8 +27,8 @@ export function PasswordInput({
             accessibilityLabel={isVisible ? "Hide password" : "Show password"}
             accessibilityRole="button"
         >
-            <Feather
-                name={isVisible ? "eye-off" : "eye"}
+            <FontAwesome6
+                name={isVisible ? "eye-slash" : "eye"}
                 size={20}
                 color="#9CA3AF"
             />

@@ -1,5 +1,5 @@
 import { useTheme } from "@/providers/ThemeProvider";
-import Feather from "@expo/vector-icons/Feather";
+import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import * as Haptics from "expo-haptics";
 import { useEffect } from "react";
 import { Pressable, View } from "react-native";
@@ -58,7 +58,7 @@ const ThemeToggle = () => {
 const Icon = ({ icon, isActive }: IconProps) => {
     return (
         <View className="w-10 h-10 relative z-50 rounded-full items-center justify-center">
-            <Feather
+            <FontAwesome6
                 name={icon}
                 size={20}
                 color={isActive ? "#FFFFFF" : "#9CA3AF"}
