@@ -1,5 +1,6 @@
 import { CustomHeader } from "@/components/ui/CustomHeader";
 import "@/global.css";
+import { AlertProvider } from "@/providers/AlertProvider";
 import { AuthProvider } from "@/providers/AuthProvider";
 import { ThemeProvider } from "@/providers/ThemeProvider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -26,7 +27,9 @@ export default function RootLayout() {
         <QueryClientProvider client={queryClient}>
             <ThemeProvider>
                 <AuthProvider>
-                    <RootNavigator />
+                    <AlertProvider>
+                        <RootNavigator />
+                    </AlertProvider>
                 </AuthProvider>
             </ThemeProvider>
         </QueryClientProvider>

@@ -22,10 +22,12 @@ export function Alert({
     ...props
 }: AlertProps) {
     const variantStyles = {
-        info: "bg-info/10 border-info",
-        success: "bg-success/10 border-success",
-        warning: "bg-warning/10 border-warning",
-        error: "bg-error/10 border-error",
+        info: "bg-blue-50 dark:bg-blue-900/30 border-blue-300 dark:border-blue-700",
+        success:
+            "bg-green-50 dark:bg-green-900/30 border-green-300 dark:border-green-700",
+        warning:
+            "bg-yellow-50 dark:bg-yellow-900/30 border-yellow-300 dark:border-yellow-700",
+        error: "bg-red-50 dark:bg-red-900/30 border-red-300 dark:border-red-700",
     };
 
     const iconNames = {
@@ -40,6 +42,13 @@ export function Alert({
         success: "#10B981",
         warning: "#F59E0B",
         error: "#EF4444",
+    };
+
+    const textColors = {
+        info: "text-blue-800 dark:text-blue-200",
+        success: "text-green-800 dark:text-green-200",
+        warning: "text-yellow-800 dark:text-yellow-200",
+        error: "text-red-800 dark:text-red-200",
     };
 
     return (
@@ -61,11 +70,13 @@ export function Alert({
             )}
             <View className="flex-1">
                 {title && (
-                    <Text className="text-text font-semibold mb-1">
+                    <Text
+                        className={`font-semibold mb-1 ${textColors[variant]}`}
+                    >
                         {title}
                     </Text>
                 )}
-                <Text className="text-text-secondary">{message}</Text>
+                <Text className={textColors[variant]}>{message}</Text>
             </View>
         </View>
     );
